@@ -1,6 +1,6 @@
 // let Escena = "Intro";
-// let Escena = "GamePlay";
-let Escena = "GameOver";
+let Escena = "GamePlay";
+// let Escena = "GameOver";
 var TimeDraw = 0;
 
 let Enter=13;
@@ -27,7 +27,7 @@ let GamePlataforms="";
 
 
 Screen.init();
-ctx = Screen.context;
+// ctx = Screen.context;
 
 KeyboardEvents();
 
@@ -60,12 +60,10 @@ const Nave = {
 				"asset/image/Explosion5.png",
 				"asset/image/Explosion6.png",
 				"asset/image/Explosion7.png"
-			],
-			
+			],		
 		farmeExplocion:0,
 		TimeAnimacion:0,
-		StateAnimacion:false,
-		
+		StateAnimacion:false,		
 		paint:function(){	
 			if(Nave.draw==true){
 
@@ -85,7 +83,7 @@ const Nave = {
 			}
 
 				Images(-Nave.W/2, -Nave.H/2, Nave.W, Nave.H, Nave.URL+Nave.NaveImg);	
-				
+				Square(-Nave.W/2, -Nave.H/2, Nave.W, Nave.H, 0, Nave.Color);
 				ctx.restore();
 		
 			}
@@ -157,7 +155,6 @@ const Nave = {
 				ctx.restore();
 		},
 		Fire:function(){
-
 		//movimiento disparo		
 			for(var i in Disparo){				
 					var Fn1 = Disparo[i];
@@ -393,8 +390,6 @@ const Meteor = {
 	
 		};
 
-
-
 function AreaNula(x1,y1,x2,y2){
 
 }
@@ -403,8 +398,8 @@ function AreaNula(x1,y1,x2,y2){
 function Intro(){
 	// Square(0,0,Screen.W,Screen.H,0,"grey");
 	Images(0,0,Screen.W,Screen.H,"asset/image/Background.png");
-	Text("Destructor Asteroid",'70.5px Calibri','yellow',Screen.W/2-274,Screen.H/2);
-	Text("Destructor Asteroid",'70px Calibri','white',Screen.W/2-270,Screen.H/2);
+	Text("Asteroid Destroyer",'70.5px Calibri','yellow',Screen.W/2-274,Screen.H/2);
+	Text("Asteroid Destroyer",'70px Calibri','white',Screen.W/2-270,Screen.H/2);
 	
 	Text("Press Enter",'50.5px Calibri','yellow',Screen.W/2-93,Screen.H-100);
 	Text("Press Enter",'50px Calibri','white',Screen.W/2-90,Screen.H-100);
@@ -463,8 +458,7 @@ function Keyboard(){
 				// if(Frame!=6){
 					// Frame+=1;
 				// }
-				// else{
-					
+				// else{					
 					// Frame=0;
 				// }
 			// ctx.save();						

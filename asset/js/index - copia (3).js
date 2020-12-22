@@ -1,8 +1,8 @@
-// let Escena = "Intro";
-let Escena = "GamePlay";
+let Escena = "Intro";
+// let Escena = "GamePlay";
 // let Escena = "GameOver";
 
-let Nute = true;
+ let Nute = false;
  
 var TimeDraw = 0;
 
@@ -19,6 +19,7 @@ let D = 68;
 let Disparo = [];
 let Meteors = [];
 
+let angle=0;
 var Tecla_Presionada=0;
 let Score=0;
 
@@ -31,7 +32,6 @@ let  Meteor_Type_Origin = 0
 let  Meteor_Width_origin = 0;
 let  Meteor_Heigth_origin = 0;
 let  Meteor_Color_Origin = "rgba(255,255,255,1)";
-
 
 const Meteor_Frame=[
 			"asset/image/MeteorExplocion1.png",
@@ -56,8 +56,12 @@ var Sound_ExplocionNave;
 var Sound_Disparo;
 var Sound_Gameplay;
 
-Sound_Intro = new Sound(Sound_url[0]);
-Sound_ExplocionNave = new Sound(Sound_url[3]);
+
+ Sound_Intro = new Sound(Sound_url[0]);
+
+
+ Sound_ExplocionNave = new Sound(Sound_url[3]);
+
 Sound_Gameplay = new Sound(Sound_url[5]);
 
 var color1 = "rgba(0, 191, 255, 0)";
@@ -69,25 +73,13 @@ Screen.init();
 KeyboardEvents();
 
 
-function ClearVariables(){
-					Meteors = [];
-					Disparo = [];					
-					Nute = true;
-					TimeDraw = 0;			
-					Tecla_Presionada=0;
-					Score=0;
-					Frame=0;
-					addFrame=0;					
-					Pause = false;
-}
-
 const Nave = {
 		draw:true,
 		X:canvas.width/2,
 		Y:canvas.height/2,
-		W:80,
-		H:80,
-		Radius:40,
+		W:100,
+		H:100,
+		Radius:60,
 		Angle:0,
 		Radians:0,
 		live:3,
@@ -111,30 +103,30 @@ const Nave = {
 		colli:false,
 		paint:function(){
 		
-				if(Nave.draw==true){
-						
-				ctx.save();						
-				ctx.translate(Nave.X, Nave.Y);
-				ctx.rotate(Nave.Radians);
+			if(Nave.draw==true){
+					
+			ctx.save();						
+			ctx.translate(Nave.X, Nave.Y);
+			ctx.rotate(Nave.Radians);
 
-				if(Nave.live>3){
-					Circle(3,0, 40, 0, "rgba(51, 153, 255, 0.7)");
-					Circle(3,0, 52, 0, "rgba(255, 255, 204, 0.4)");
-				}
-				if(Nave.live==3){
-					Circle(3,0, 40, 0, "rgba(102, 204, 255, 0.7)");
-				}
-				if(Nave.live==2){
-					Circle(3,0, 40, 0, "rgba(102, 204, 255, 0.4)");
-				}
-				if(Nave.live==1){
-					Circle(3,0, 40, 0, "rgba(102, 204, 255, 0.1)");
-				}
+			if(Nave.live>3){
+				Circle(3,0, 70, 0, "rgba(51, 153, 255, 0.7)");
+				Circle(3,0, 78, 0, "rgba(255, 255, 204, 0.4)");
+			}
+			if(Nave.live==3){
+				Circle(3,0, 70, 0, "rgba(102, 204, 255, 0.7)");
+			}
+			if(Nave.live==2){
+				Circle(3,0, 70, 0, "rgba(102, 204, 255, 0.4)");
+			}
+			if(Nave.live==1){
+				Circle(3,0, 70, 0, "rgba(102, 204, 255, 0.1)");
+			}
 
-					Images(-Nave.W/2, -Nave.H/2, Nave.W, Nave.H, Nave.URL+Nave.NaveImg);	
-					ctx.restore();
-			
-				}
+				Images(-Nave.W/2, -Nave.H/2, Nave.W, Nave.H, Nave.URL+Nave.NaveImg);	
+				ctx.restore();
+		
+			}
 			
 		},
 		Move:function(){
@@ -313,7 +305,7 @@ const Nave = {
 		},
 		collision:function(){
 			
-			if(Nave.draw==true && Nave.colli==false){
+			if(Nave.draw==true ){
 				
 				for(var i in Meteors){
 			
@@ -321,48 +313,24 @@ const Nave = {
 				
 					let Collision = CircleCollision.init(Meteor.X, Meteor.Y, Nave.X, Nave.Y, 100);
 					
-					if(!Collision){  }						
-								else{
-									if(Score>0){Score-=1;}		 
-									Nave.live-=1;
-									
-									Nave.colli = true;
-									Meteor.StateAnimacion=true;
-									
-									
-									// Meteors.splice(i,1);
-									//impedir colision no eliminar asteroide
-								}
+					if(!Collision){	Nave.colli=false;}
+							 else{
+								 
+							
+								Nave.live-=1;
+								
+								// Meteors.splice(i,1);
+								//impedir colision no eliminar asteroide
+							 }
+							 
 				}
 			}
-			else
-				if(Nave.colli==true){
-							setTimeout(function (){Nave.colli=false},1000);
-				}
-			
-		},
-		Clear:function(){
-				Nave.draw=true;
-				Nave.X=canvas.width/2;
-				Nave.Y=canvas.height/2;
-				Nave.W=80;
-				Nave.H=80;
-				Nave.Radius=60;
-				Nave.Angle=0;
-				Nave.Radians=0;
-				Nave.live=3;
-				Nave.addnewLive=0;
-				Nave.Speed=20;
-				
-					Nave.farmeExplocion = 0;
-					Nave.TimeAnimacion = 0;
-					Nave.StateAnimacion = false;
-					Nave.colli = false;
-			
 			
 		}
 		
+		
 	};
+
 
 const Meteor = {
 	generate:function(Type,color,X,Y,W,H){
@@ -448,7 +416,7 @@ const Meteor = {
 							M.FrameExplocionMeteor = 0;
 							
 							Meteors.splice(i,1);
-							// Meteor.generate();							
+							Meteor.generate();							
 				}					
 									
 			if(M.FrameExplocionMeteor==1){
@@ -531,7 +499,7 @@ const Meteor = {
 	},
 	Collision:function(){
 
-	if(Meteors.length!==0){
+		if(Meteors.length!==0){
 			
 		for(var i=0; i<Meteors.length; i++){
 			for(var a=0; a<Disparo.length; a++){
@@ -578,15 +546,20 @@ const Meteor = {
 															Nave.live+=1;
 															Meteor.Speed+=.5;
 															Nave.addnewLive=0;
-													}	
+													}
+													
+																
+
+													
+													
 											}
-												
+												Sound_ExplocionMeteor.stop();
 										}
 							}//for disparo
 					}//for meteor
 			}
 			
-		}//cierre funcion
+			}//cierre funcion
 	};
 	
 function PauseGame(){
@@ -630,77 +603,79 @@ function Interfaz_Gameplay(){
 			
  	 	 	  }
 
-let Intro = {
-	Fondo:function(){
-					Images(0,0,Screen.W,Screen.H,"asset/image/Background.png");		
-					},
+function IntroFondo(){
+	Images(0,0,Screen.W,Screen.H,"asset/image/Background.png");		
+}
 
-	Text:function(){
+function IntroText(){
 
-			Time.Interval(5,10,true);	
+Time.Interval(5,10,true);	
 
-			if(Time.state==true){
-			   Text("Asteroid Destroyer",'70.5px Calibri','yellow',Screen.W/2-274,Screen.H/2);
-			}
+    if(Time.state==true){
+       Text("Asteroid Destroyer",'70.5px Calibri','yellow',Screen.W/2-274,Screen.H/2);
+    }
 
-			Text("Asteroid Destroyer",'70px Calibri','white',Screen.W/2-270,Screen.H/2);
-			Text("Press Enter",'50.5px Calibri','yellow',Screen.W/2-93,Screen.H-100);
-			Text("Press Enter",'50px Calibri','white',Screen.W/2-90,Screen.H-100);
+	Text("Asteroid Destroyer",'70px Calibri','white',Screen.W/2-270,Screen.H/2);
+	Text("Press Enter",'50.5px Calibri','yellow',Screen.W/2-93,Screen.H-100);
+	Text("Press Enter",'50px Calibri','white',Screen.W/2-90,Screen.H-100);
 
-			if(Keyboard[Enter] && Tecla_Presionada==0){
-									
-						if(Nute==false){
-							Sound_Enter = new Sound(Sound_url[1]);
-							Sound_Enter.play();
-						}
-						
-						Tecla_Presionada+=1;
-						
-						setTimeout(function(){
-								ClearVariables(); 
-								Escena = "GamePlay";  
-								},1000);	
-
-						}					
-						if(Keyboard[Enter]==false && Tecla_Presionada==1){ 
-										
-										
-								Tecla_Presionada=0;
+	if(Keyboard[Enter] && Tecla_Presionada==0){
 								
-							}
-					
+												
+				if(Nute==false){
+					Sound_Enter = new Sound(Sound_url[1]);
+					Sound_Enter.play();
+				}
+				Tecla_Presionada+=1;
+				
+				Meteors=[];
+				
+				setTimeout(function(){	Escena = "GamePlay";  },2000);	
+
+				}					
+				if(Keyboard[Enter]==false && Tecla_Presionada==1){ 
+								
+						Tecla_Presionada=0;
+					}
 			
-		}
- }
+	
+}
 
 function GameOver(){
-		Images(0,0,Screen.W,Screen.H,"asset/image/Background.png");
-		
-		Time.Interval(5,10,true);	
-		if(Time.state==true){
-		   Text("Game Over",'73px Calibri','red',Screen.W/2-155,Screen.H/2);
-		}
-		
-		Text("Game Over",'70px Calibri','white',Screen.W/2-150,Screen.H/2);
-		Text("Press Enter",'50.5px Calibri','red',Screen.W/2-93,Screen.H-100);
-		Text("Press Enter",'50px Calibri','white',Screen.W/2-90,Screen.H-100);
+	Images(0,0,Screen.W,Screen.H,"asset/image/Background.png");
+	
+	Time.Interval(5,10,true);	
+    if(Time.state==true){
+       Text("Game Over",'73px Calibri','red',Screen.W/2-155,Screen.H/2);
+    }
+	
+	Text("Game Over",'70px Calibri','white',Screen.W/2-150,Screen.H/2);
+	Text("Press Enter",'50.5px Calibri','red',Screen.W/2-93,Screen.H-100);
+	Text("Press Enter",'50px Calibri','white',Screen.W/2-90,Screen.H-100);
 
-		if(Keyboard[Enter] && Tecla_Presionada==0){
-					
-					if(Nute==false){
-					
-						Sound_Enter = new Sound(Sound_url[1]);
-						Sound_Enter.play();
-					}
+	if(Keyboard[Enter] && Tecla_Presionada==0){
 						
-						Tecla_Presionada+=1;	
-							ClearVariables();
+						Sound_Enter.play();
+						
+						Tecla_Presionada+=1;						
 						Escena = "Intro";
 						
 					
 				}
 					
-			if(Keyboard[Enter]==false){ Tecla_Presionada=0; 		}
+			if(Keyboard[Enter]==false){ Tecla_Presionada=0; 	Sound_Enter.stop();	}
+			
+				Nave.live = 3;
+				Nave.draw = true;
+				Nave.X = canvas.width/2;
+				Nave.Y = canvas.width/2;
+				Nave.Radians = 0;
+				Score = 0;
+				Disparo = [];
+			
+			
+			
+			
 			
 			
 }
@@ -713,7 +688,8 @@ function LoopGame(){
 				if(Nute==false){
 					Sound_Intro.play();
 				}
-				Intro.Fondo();					
+				IntroFondo();
+					
 				if(Meteors.length==0 ){
 						for(let i = 0; i < 10; i++){			
 							Meteor.generate();
@@ -721,24 +697,22 @@ function LoopGame(){
 					}					
 					Meteor.Move();
 					Meteor.paint();					
-					Intro.Text();	
+					IntroText();	
 			break;
 			
 			case "GamePlay":
 			
 				Sound_Intro.stop();
-				
-					if(Nute==false){
-						Sound_Gameplay.play();
-					}
-					
+			if(Nute==false){
+				Sound_Gameplay.play();
+			}
 				FondoGamplay();
 				
 				
-					if(Pause == false){
-						Nave.Move();
-						Nave.collision();
-					}
+			if(Pause == false){
+				Nave.Move();
+				Nave.collision();
+			}
 			
 				Nave.Paint_disparo();
 				Nave.Fire();
@@ -763,29 +737,38 @@ function LoopGame(){
 				Meteor.paint();
 				
 	
-				if(Pause == false){
-					Interfaz_Gameplay();
-				}
-				
-				PauseGame();
+			if(Pause == false){
+				Interfaz_Gameplay();
+			}
+			
+			PauseGame();
 			
 			break; 
 
 			case "GameOver":
 					GameOver();
-					Nave.Clear();
-					
 			break;
 			  
 			  default:
 					alert("ERROR");
-	}
+	}	
 	
-	// Text("Meteors"+Meteors.length,'70px Calibri','white',50,100);
-	Text("Nave.colli"+" "+Nave.colli,'40px Calibri','white',50,100);
+	
+			
+	
+			
+		
+	
+	
+	
+	
+	
+	
 	
 	Game_loop.start(LoopGame);
-
+	
+	
+		
 }
 
 

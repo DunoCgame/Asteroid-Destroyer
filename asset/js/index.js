@@ -1,8 +1,17 @@
-// let Escena = "Intro";
-let Escena = "GamePlay";
+/****
+Asteoid Destoyer 1.0.0 Game Make of HorizonFrontierJs
+Developer: Luis Edgardo Duno Castellano
+Lisense Mit;
+
+***/
+
+	
+	
+	let Escena = "Intro";
+// let Escena = "GamePlay";
 // let Escena = "GameOver";
 
-let Nute = true;
+let Nute = false;
  
 var TimeDraw = 0;
 
@@ -10,6 +19,7 @@ let Enter=13;
 let Up = 38;
 let Down = 40;
 let Space = 32;
+let Escape=27;
 
 let A = 65;
 let W = 87;
@@ -96,6 +106,7 @@ const Nave = {
 		Color:"rgba(255,255,255,0.2)",
 		URL:"asset/image/",
 		NaveImg:"Nave.png",
+		NaveCollisionImg:"asset/image/Nave-collision2.png",
 		ExplosionAnimacion:[
 				"asset/image/Explosion1.png",
 				"asset/image/Explosion2.png",
@@ -111,7 +122,7 @@ const Nave = {
 		colli:false,
 		paint:function(){
 		
-				if(Nave.draw==true){
+				if(Nave.draw==true && Nave.colli==false){
 						
 				ctx.save();						
 				ctx.translate(Nave.X, Nave.Y);
@@ -135,6 +146,15 @@ const Nave = {
 					ctx.restore();
 			
 				}
+				else
+					if(Nave.draw==true && Nave.colli==true){
+						
+						ctx.save();						
+						ctx.translate(Nave.X, Nave.Y);
+						ctx.rotate(Nave.Radians);
+						Images(-Nave.W/2, -Nave.H/2, Nave.W, Nave.H, Nave.NaveCollisionImg);	
+						ctx.restore();
+				}
 			
 		},
 		Move:function(){
@@ -157,9 +177,14 @@ const Nave = {
 		
 			//disparo
 			if(Keyboard[Enter] && Tecla_Presionada==0){
-				if(Nute==false){
+				
 						Sound_Disparo = new Sound(Sound_url[4]);
-						Sound_Disparo.play();			
+						Sound_Disparo.play();
+
+				if(Nute==true){
+					Sound_Disparo.stop();
+					
+					
 				}						
 						Tecla_Presionada+=1;												
 						Nave.Disparo();	
@@ -226,9 +251,11 @@ const Nave = {
 						Nave.StateAnimacion=true;
 
 				if(Nave.StateAnimacion==true){
+					
 					if(Nute==false){
 						Sound_ExplocionNave.play();
 					}
+					
 					if(Frame!=7){
 						
 						addFrame+=1;
@@ -297,8 +324,12 @@ const Nave = {
 						
 						Nave.StateAnimacion=false;
 								 Escena="GameOver";
-								 Sound_ExplocionNave.stop();
+								 
+								if(Nute==true){
 						
+					
+								 Sound_ExplocionNave.stop();
+								}
 					}
 						
 					
@@ -328,15 +359,16 @@ const Nave = {
 									
 									Nave.colli = true;
 									Meteor.StateAnimacion=true;
-									
-									
-									// Meteors.splice(i,1);
+
 									//impedir colision no eliminar asteroide
 								}
 				}
 			}
 			else
 				if(Nave.colli==true){
+					
+					
+							
 							setTimeout(function (){Nave.colli=false},1000);
 				}
 			
@@ -540,9 +572,14 @@ const Meteor = {
 
 						if(!Collision){  }
 										else{
+											Sound_ExplocionMeteor = new Sound(Sound_url[2]);
 											if(Nute==false){
-												Sound_ExplocionMeteor = new Sound(Sound_url[2]);
+												
 													Sound_ExplocionMeteor.play();
+											}
+											if(Nute==true){
+												
+													Sound_ExplocionMeteor.stop();
 											}
 
 											//mediano
@@ -646,12 +683,20 @@ let Intro = {
 			Text("Asteroid Destroyer",'70px Calibri','white',Screen.W/2-270,Screen.H/2);
 			Text("Press Enter",'50.5px Calibri','yellow',Screen.W/2-93,Screen.H-100);
 			Text("Press Enter",'50px Calibri','white',Screen.W/2-90,Screen.H-100);
+			
+			
+			Text("HorizonFrontierJs",'30px Calibri','white',Screen.W-300,Screen.H-10);
 
-			if(Keyboard[Enter] && Tecla_Presionada==0){
+			if(Keyboard[Enter] && Tecla_Presionada==0 && Escena == "Intro"){
+				Sound_Enter = new Sound(Sound_url[1]);
 									
 						if(Nute==false){
-							Sound_Enter = new Sound(Sound_url[1]);
+							
 							Sound_Enter.play();
+						}
+						if(Nute==true){
+							
+							Sound_Enter.stop();
 						}
 						
 						Tecla_Presionada+=1;
@@ -662,7 +707,7 @@ let Intro = {
 								},1000);	
 
 						}					
-						if(Keyboard[Enter]==false && Tecla_Presionada==1){ 
+						if(Keyboard[Enter]==false){ 
 										
 										
 								Tecla_Presionada=0;
@@ -685,12 +730,16 @@ function GameOver(){
 		Text("Press Enter",'50.5px Calibri','red',Screen.W/2-93,Screen.H-100);
 		Text("Press Enter",'50px Calibri','white',Screen.W/2-90,Screen.H-100);
 
-		if(Keyboard[Enter] && Tecla_Presionada==0){
+		if(Keyboard[Enter] && Tecla_Presionada==0 && Escena == "GameOver"){
 					
 					if(Nute==false){
 					
 						Sound_Enter = new Sound(Sound_url[1]);
 						Sound_Enter.play();
+					}if(Nute==true){
+					
+						
+						Sound_Enter.stop();
 					}
 						
 						Tecla_Presionada+=1;	
@@ -705,13 +754,53 @@ function GameOver(){
 			
 }
 
+function AudioState(){
+	if(Keyboard[Escape] && Tecla_Presionada==0){
+
+					
+				if(Nute == false){
+						Nute = true;
+				}
+				else
+					if(Nute == true){
+							Nute = false;
+							
+					}
+						
+						}					
+						if(Keyboard[Escape]==false && Tecla_Presionada==1){ 
+										
+										
+								Tecla_Presionada = 0 ;
+								
+							}
+							
+				if(Nute == false){
+						
+						Images(50,Screen.H-50,60,60,"asset/image/Soundimg.png");
+				}
+				else
+					if(Nute == true){
+					
+						Images(50,Screen.H-50,60,60,"asset/image/Nuteimg.png");
+							
+					}		
+							
+							
+				// Text("Nute"+Nute,'40px Calibri','white',50,100);
+}
+
+
 function LoopGame(){
 	
 	switch(Escena){
 			case "Intro":
 				Sound_Gameplay.stop();
-				if(Nute==false){
+				
 					Sound_Intro.play();
+					
+				if(Nute==true){
+					Sound_Intro.stop();
 				}
 				Intro.Fondo();					
 				if(Meteors.length==0 ){
@@ -730,6 +819,9 @@ function LoopGame(){
 				
 					if(Nute==false){
 						Sound_Gameplay.play();
+					}
+					if(Nute==true){
+					Sound_Gameplay.stop();
 					}
 					
 				FondoGamplay();
@@ -781,8 +873,10 @@ function LoopGame(){
 					alert("ERROR");
 	}
 	
+	AudioState();
 	// Text("Meteors"+Meteors.length,'70px Calibri','white',50,100);
-	Text("Nave.colli"+" "+Nave.colli,'40px Calibri','white',50,100);
+	// Text("Nave.colli"+" "+Nave.colli,'40px Calibri','white',50,100);
+	
 	
 	Game_loop.start(LoopGame);
 

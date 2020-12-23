@@ -718,6 +718,20 @@ let Intro = {
 		}
  }
 
+function Indicador_de_teclas(){
+	
+	
+	Text("Keyboard",'20px Calibri','white',35,50);
+	Text("Left D",'20px Calibri','white',50,75);
+	Text("Up W",'20px Calibri','white',50,100);
+	Text("Right A",'20px Calibri','white',50,130);
+	Text("Pause Space",'20px Calibri','white',50,154);
+	Text("Sound Escape",'20px Calibri','white',50,180);
+	
+	
+	
+}
+
 function GameOver(){
 		Images(0,0,Screen.W,Screen.H,"asset/image/Background.png");
 		
@@ -810,7 +824,9 @@ function LoopGame(){
 					}					
 					Meteor.Move();
 					Meteor.paint();					
-					Intro.Text();	
+					Intro.Text();
+
+Indicador_de_teclas();					
 			break;
 			
 			case "GamePlay":

@@ -8,5 +8,8 @@
   },
   "keywords": [],
   "author": "Luis Edgardo Duno Castellano <luisdunocastellano@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "horizonfrontierjs": "^2.0.1"
+  }
 }
